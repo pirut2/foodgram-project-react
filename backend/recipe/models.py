@@ -41,7 +41,9 @@ class IngredientsBd (models.Model):
 class IngredientsRecipe(models.Model):
     """Ингридиенты колличество. Для модели рецепта"""
     ingredients = models.ForeignKey(
-        IngredientsBd, on_delete=models.CASCADE, related_name='ingredients_recipe')
+        IngredientsBd,
+        on_delete=models.CASCADE,
+        related_name='ingredients_recipe')
     amount = models.PositiveIntegerField(
         default=1, verbose_name='количество ингридиента')
 
@@ -89,10 +91,12 @@ class FollowRecipes(models.Model):
     """Подписка на рецепты"""
     recipes = models.ForeignKey(Recipe,
                                 on_delete=models.CASCADE,
-                                related_name='follow_recipes', verbose_name='рецепт')
+                                related_name='follow_recipes',
+                                verbose_name='рецепт')
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
-                             related_name='follow_recipes', verbose_name='пользователь')
+                             related_name='follow_recipes',
+                             verbose_name='пользователь')
 
     class Meta:
         ordering = ('user', )
