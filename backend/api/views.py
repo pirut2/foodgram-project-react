@@ -108,42 +108,6 @@ class RecipeViewSet(ModelViewSet):
             return Response({'Рецепта, который Вы хотите удалить из списка покупок, не существует.'},
                             status=status.HTTP_404_NOT_FOUND)
 
-    """@action(
-        detail=False,
-        methods=['get'],
-        permission_classes=[IsAuthenticated]
-    )
-    def download_shopping_cart(self, request):
-        """"""Метод для скачивания списка покупок.""""""
-        user = request.user
-        if not user.shopping_cart.exists():
-            return Response('У Вас отсутствует Shopping_cart',
-                            status=HTTP_400_BAD_REQUEST)
-        ingredients = IngredientsRecipe.objects.filter(
-            recipes__shopping_cart__user=request.user
-        ).values(
-            'ingredients__name',
-            'ingredients__measurement_unit'
-        ).annotate(amount=Sum('amount'))
-        today = datetime.today()
-        shopping_list = (
-            f'Список покупок для: {user.get_full_name()}\n\n'
-            f'Дата: {today:%Y-%m-%d}\n\n'
-        )
-        shopping_list += '\n'.join([
-            f'- {ingredient["ingredients__name"]} '
-            f'({ingredient["ingredients__measurement_unit"]})'
-            f' - {ingredient["amount"]}'
-            for ingredient in ingredients
-        ])
-        shopping_list += f'\n\nFoodgram ({today:%Y})'
-        filename = f'{user.username}_shopping_list.txt'
-        response = HttpResponse(
-            shopping_list, content_type='text.txt; charset=utf-8'
-        )
-        response['Content-Disposition'] = f'attachment; filename={filename}'
-        return response"""
-
     @action(
         detail=False,
         methods=['get'],
