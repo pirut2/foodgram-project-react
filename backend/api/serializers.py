@@ -8,7 +8,7 @@ from rest_framework.serializers import ModelSerializer
 from djoser.serializers import UserSerializer, UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 
-from recipe.models import *
+from recipe.models import Recipe, Tag, IngredientsBd, IngredientsRecipe
 from users.models import User, FollowAuthor
 
 
@@ -185,7 +185,7 @@ class RecipeWriteSerializer(ModelSerializer):
     def validate_image(self, value):
         if not value:
             raise ValidationError(
-                detail='Картинка для рецепта обязательна, такие правила  \_ (ツ)_/',
+                detail=('Картинка для рецепта обязательна'),
                 code=status.HTTP_400_BAD_REQUEST
             )
         return value

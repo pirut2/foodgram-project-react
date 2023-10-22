@@ -2,7 +2,6 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
-from django.template.loader import get_template
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters, status
 from rest_framework.response import Response
@@ -12,9 +11,9 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 
 from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 
-from recipe.models import (FollowRecipes, IngredientsBd, IngredientsRecipe, Recipe,
+from recipe.models import (FollowRecipes, IngredientsBd,
+                           IngredientsRecipe, Recipe,
                            ShoppingCart, Tag)
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from .filters import RecipeFilter, IngredientsBdFilter
@@ -61,7 +60,8 @@ class RecipeViewSet(ModelViewSet):
     def favorite(self, request, pk):
         """Метод для добавления/удаления из избранного."""
         if request.method == 'POST':
-            if FollowRecipes.objects.filter(user=request.user, recipes__id=pk).exists():
+            if FollowRecipes.objects.filter(user=request.user,
+                                            recipes__id=pk).exists():
                 return Response({'Рецепт уже добален в избранное.'},
                                 status=status.HTTP_400_BAD_REQUEST)
             if not Recipe.objects.filter(id=pk).exists():
@@ -78,7 +78,8 @@ class RecipeViewSet(ModelViewSet):
                 obj.delete()
                 return Response({'Рецепт успешно удален из избранного.'},
                                 status=status.HTTP_204_NO_CONTENT)
-            return Response({'Рецепта, который Вы хотите удалить из избранного, не существует.'},
+            return Response({'Рецепта, который Вы хотите удалить'
+                            'из избранного, не существует.'},
                             status=status.HTTP_404_NOT_FOUND)
 
     @action(
@@ -89,7 +90,8 @@ class RecipeViewSet(ModelViewSet):
     def shopping_cart(self, request, pk):
         """Метод для добавления/удаления из списка покупок."""
         if request.method == 'POST':
-            if ShoppingCart.objects.filter(user=request.user, recipe__id=pk).exists():
+            if ShoppingCart.objects.filter(user=request.user,
+                                           recipe__id=pk).exists():
                 return Response({'Рецепт уже добален в список покупок.'},
                                 status=status.HTTP_400_BAD_REQUEST)
             if not Recipe.objects.filter(id=pk).exists():
@@ -105,7 +107,9 @@ class RecipeViewSet(ModelViewSet):
                 obj.delete()
                 return Response({'Рецепт успешно удален из списка покупок.'},
                                 status=status.HTTP_204_NO_CONTENT)
-            return Response({'Рецепта, который Вы хотите удалить из списка покупок, не существует.'},
+            return Response({'Рецепта, '
+                             'который Вы хотите удалить'
+                             'из списка покупок, не существует.'},
                             status=status.HTTP_404_NOT_FOUND)
 
     @action(
