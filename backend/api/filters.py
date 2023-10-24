@@ -3,8 +3,6 @@ from django_filters.rest_framework import FilterSet, filters
 
 from recipe.models import Recipe, Tag, IngredientsBd
 
-User = get_user_model()
-
 
 class IngredientsBdFilter(FilterSet):
     name = filters.CharFilter(lookup_expr='startswith')

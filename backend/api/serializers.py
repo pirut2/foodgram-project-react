@@ -9,7 +9,7 @@ from djoser.serializers import UserSerializer, UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 
 from recipe.models import Recipe, Tag, IngredientsBd, IngredientsRecipe
-from users.models import User, FollowAuthor
+from users.models import User
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
@@ -55,7 +55,7 @@ class CustomUserSerializer(UserSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return FollowAuthor.objects.filter(user=user, author=author).exists()
+        return user.follower.filter(author=author).exists()
 
 
 class TagSerializer(ModelSerializer):
@@ -99,18 +99,7 @@ class RecipeReadSerializer(ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = (
-            'id',
-            'tags',
-            'author',
-            'ingredients',
-            'is_favorited',
-            'is_in_shopping_cart',
-            'name',
-            'image',
-            'text',
-            'cooking_time',
-        )
+        exclude = ['pub_date']
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
@@ -261,7 +250,7 @@ class FollowAuthorSerializer(CustomUserSerializer):
     def validate(self, data):
         author = self.instance
         user = self.context.get('request').user
-        if FollowAuthor.objects.filter(author=author, user=user).exists():
+        if user.follower.filter(author=author).exists():
             raise ValidationError(
                 detail='Вы уже подписаны на этого пользователя.',
                 code=status.HTTP_400_BAD_REQUEST

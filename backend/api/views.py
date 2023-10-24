@@ -15,6 +15,7 @@ from reportlab.pdfgen import canvas
 from recipe.models import (FollowRecipes, IngredientsBd,
                            IngredientsRecipe, Recipe,
                            ShoppingCart, Tag)
+from .pagination import RecipePagination
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from .filters import RecipeFilter, IngredientsBdFilter
 from .serializers import (IngredientsBdSerializer, RecipeReadSerializer,
@@ -43,6 +44,7 @@ class RecipeViewSet(ModelViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
+    pagination_class = RecipePagination
 
     def get_serializer_class(self):
         if self.request.method in permissions.SAFE_METHODS:

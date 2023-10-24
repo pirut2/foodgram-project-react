@@ -19,6 +19,7 @@ class Tag(models.Model):
         return self.name
 
     class Meta:
+        ordering = ('name', )
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
