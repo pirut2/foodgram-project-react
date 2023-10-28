@@ -124,22 +124,25 @@ class RecipeViewSet(ModelViewSet):
             return Response('У Вас отсутствует Shopping_cart',
                             status=HTTP_400_BAD_REQUEST)
         date = datetime.today()
-        ingredients = (
-            IngredientsRecipe.objects
-            .filter(recipes__shopping_cart__user=request.user)
-            .values('ingredients').annotate(amount=Sum('amount'))
-            .values_list('ingredients__name',
-                         'ingredients__measurement_unit',
-                         'amount'))
-        download_list = [
-            ('{}, ({}) - {}'.format(*ingredient)) + '\n'
+        ingredients = IngredientsRecipe.objects.filter(
+            recipe__shopping_cart__user=request.user
+        ).values(
+            'ingredients__name',
+            'ingredients__measurement_unit'
+        ).annotate(amount=Sum('amount'))
+        shopping_list = (
+            f'Список покупок для: {user.get_full_name()}\n\n'
+            f'Дата: {date:%Y-%m-%d}\n\n'
+        )
+        shopping_list += '\n'.join([
+            f'- {ingredient["ingredients__name"]} '
+            f'({ingredient["ingredients__measurement_unit"]})'
+            f' - {ingredient["amount"]}'
             for ingredient in ingredients
-        ]
-        filename = f'{user.username}_shopping_list.pdf'
+        ])
+        shopping_list += f'\n\nFoodgram ({date:%Y})'
 
-        response = HttpResponse(f'Список покупок {user.get_full_name()}\n'
-                                + f'\n Дата: {date:%Y-%m-%d}\n\n'
-                                + '\n'.join(download_list),
-                                content_type='text/plain')
+        filename = f'{user.username}_shopping_list.txt'
+        response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
