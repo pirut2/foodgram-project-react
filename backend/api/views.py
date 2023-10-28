@@ -145,7 +145,7 @@ class RecipeViewSet(ModelViewSet):
 
         filename = f'{user.username}_{date:%Y-%m-%d}_shopping_list.pdf'
 
-        response = HttpResponse(content_type='application/pdf')
+        response = HttpResponse(content_type='application/pdf, charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename={filename}'
 
         p = canvas.Canvas(response)
