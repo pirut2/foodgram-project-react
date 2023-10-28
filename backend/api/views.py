@@ -123,13 +123,15 @@ class RecipeViewSet(ModelViewSet):
         if not user.shopping_cart.exists():
             return Response('У Вас отсутствует Shopping_cart',
                             status=HTTP_400_BAD_REQUEST)
-        date = datetime.today()
+
         ingredients = IngredientsRecipe.objects.filter(
             recipes__shopping_cart__user=request.user
         ).values(
             'ingredients__name',
             'ingredients__measurement_unit'
         ).annotate(amount=Sum('amount'))
+
+        date = datetime.today()
         shopping_list = (
             f'Список покупок для: {user.get_full_name()}\n\n'
             f'Дата: {date:%Y-%m-%d}\n\n'
@@ -145,4 +147,5 @@ class RecipeViewSet(ModelViewSet):
         filename = f'{user.username}_shopping_list.txt'
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
+
         return response
