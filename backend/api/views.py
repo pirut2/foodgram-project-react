@@ -130,18 +130,18 @@ class RecipeViewSet(ModelViewSet):
             'ingredients__name',
             'ingredients__measurement_unit'
         ).annotate(amount=Sum('amount'))
-        download_list = (
+        download_list_1 = (
             f'Список покупок для: {user.get_full_name()}\n\n'
             f'Дата: {date:%Y-%m-%d}\n\n'
         )
-        download_list += '\n'.join([
+        download_list_2 = '\n'.join([
             f'- {ingredient["ingredients__name"]} '
             f'({ingredient["ingredients__measurement_unit"]})'
             f' - {ingredient["amount"]}'
             for ingredient in ingredients
         ])
-
-        filename = f'{user.username}_{date:%Y-%m-%d}_shopping_list.pdf'
+        download_list = download_list_1 + download_list_2
+        filename = f'{user.username}_shopping_list.pdf'
 
         response = HttpResponse(
             download_list, content_type='text.txt, charset=utf-8')
