@@ -125,7 +125,7 @@ class RecipeViewSet(ModelViewSet):
                             status=HTTP_400_BAD_REQUEST)
         date = datetime.today()
         ingredients = IngredientsRecipe.objects.filter(
-            recipe__shopping_cart__user=request.user
+            recipes__shopping_cart__user=request.user
         ).values(
             'ingredients__name',
             'ingredients__measurement_unit'
