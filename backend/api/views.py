@@ -132,17 +132,15 @@ class RecipeViewSet(ModelViewSet):
                                           'ingredients__measurement_unit',
                                           'amount'
                                           )
-        download_list = (
-            f'Список покупок для: {user.get_full_name()}\n\n'
-            f'Дата: {date:%Y-%m-%d}\n\n'
-        )
-        download_list += '\n'.join([
-            '{}, ({}) - {}'.format(*ingredient)
+        download_list = [
+            ('{}, ({}) - {}'.format(*ingredient)) + '\n'
             for ingredient in ingredients
-        ])
+        ]
         filename = f'{user.username}_shopping_list.pdf'
 
-        response = HttpResponse(
-            download_list, content_type='text.txt, charset=utf-8')
+        response = HttpResponse(f'Список покупок {user.get_full_name()}\n'
+                                + f'\n Дата: {date:%Y-%m-%d}\n\n'
+                                + '\n'.join(download_list),
+                                content_type='text.txt, charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
