@@ -11,6 +11,8 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 from recipe.models import (FollowRecipes, IngredientsBd,
                            IngredientsRecipe, Recipe,
@@ -145,11 +147,13 @@ class RecipeViewSet(ModelViewSet):
 
         filename = f'{user.username}_{date:%Y-%m-%d}_shopping_list.pdf'
 
+        pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
+
         response = HttpResponse(content_type='application/pdf, charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename={filename}'
 
         p = canvas.Canvas(response)
-        p.drawString(100, 500, download_list)
+        p.drawString(100, 500, TTFont(download_list))
         p.showPage()
         p.save()
         return response
