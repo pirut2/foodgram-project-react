@@ -29,7 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='foodgram')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['51.250.20.235', '127.0.0.1',
+                 'localhost', 'lisiyarecipe.hopto.org']
 
 
 # Application definition

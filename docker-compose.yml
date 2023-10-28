@@ -13,21 +13,23 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
-    image: pirut2/foodgram_backend
+    build: ./backend/
     env_file: .env
     volumes:
-      - static:/app/static
-      - media:/app/media
+      - static:/app/static/
+      - media:/app/media/
     depends_on:
       - db
 
   frontend:
-    image: pirut2/foodgram_frontend
+    build: ./frontend/
     volumes:
       - ./frontend/:/app/result_build/
 
   nginx:
     image: nginx:1.19.3
+    env_file:
+      - .env
     ports:
       - "8000:80"
     volumes:

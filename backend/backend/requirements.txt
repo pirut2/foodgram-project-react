@@ -18,3 +18,4 @@ python-dotenv==0.21.0
 psycopg2-binary==2.9.7
 reportlab==4.0.6
 flake8==6.0.0
+django-extra-fields==3.0.2
