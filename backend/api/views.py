@@ -137,7 +137,7 @@ class RecipeViewSet(ModelViewSet):
             f'Дата: {date:%Y-%m-%d}\n\n'
         )
         download_list += '\n'.join([
-            '{}, ({}) - {}'.format(ingredient)
+            '{}, ({}) - {}'.format(*ingredient)
             for ingredient in ingredients
         ])
         filename = f'{user.username}_shopping_list.pdf'
