@@ -124,14 +124,13 @@ class RecipeViewSet(ModelViewSet):
             return Response('У Вас отсутствует Shopping_cart',
                             status=HTTP_400_BAD_REQUEST)
         date = datetime.today()
-        ingredients = IngredientsRecipe.objects.filter(
-            recipes__shopping_cart__user=request.user
-        ).values('ingredients'
-                 ).annotate(amount=Sum('amount')
-                            ).values_list('ingredients__name',
-                                          'ingredients__measurement_unit',
-                                          'amount'
-                                          )
+        ingredients = (
+            IngredientsRecipe.objects
+            .filter(recipes__shopping_cart__user=request.user)
+            .values('ingredients').annotate(amount=Sum('amount'))
+            .values_list('ingredients__name',
+                         'ingredients__measurement_unit',
+                         'amount'))
         download_list = [
             ('{}, ({}) - {}'.format(*ingredient)) + '\n'
             for ingredient in ingredients
@@ -141,6 +140,6 @@ class RecipeViewSet(ModelViewSet):
         response = HttpResponse(f'Список покупок {user.get_full_name()}\n'
                                 + f'\n Дата: {date:%Y-%m-%d}\n\n'
                                 + '\n'.join(download_list),
-                                content_type='text.txt, charset=utf-8')
+                                content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
