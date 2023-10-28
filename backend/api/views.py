@@ -125,22 +125,21 @@ class RecipeViewSet(ModelViewSet):
                             status=HTTP_400_BAD_REQUEST)
         date = datetime.today()
         ingredients = IngredientsRecipe.objects.filter(
-            recipes__shopping_cart__user=request.user
+            recipe__shopping_cart__user=request.user
         ).values(
             'ingredients__name',
             'ingredients__measurement_unit'
         ).annotate(amount=Sum('amount'))
-        download_list_1 = (
+        download_list = (
             f'Список покупок для: {user.get_full_name()}\n\n'
             f'Дата: {date:%Y-%m-%d}\n\n'
         )
-        download_list_2 = '\n'.join([
+        download_list += '\n'.join([
             f'- {ingredient["ingredients__name"]} '
             f'({ingredient["ingredients__measurement_unit"]})'
             f' - {ingredient["amount"]}'
             for ingredient in ingredients
         ])
-        download_list = download_list_1 + download_list_2
         filename = f'{user.username}_shopping_list.pdf'
 
         response = HttpResponse(
