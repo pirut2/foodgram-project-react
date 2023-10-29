@@ -81,12 +81,12 @@ class IngredientsRecipeSerializer(ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount', )
 
     def get_name(self, obj):
-        ingredients_bd_name = IngredientsBd.objects.get(id=obj.id)
-        return ingredients_bd_name.name
+        name = obj.ingredients.name
+        return name
 
     def get_measurement_unit(self, obj):
-        ingredients_bd_measurement_unit = IngredientsBd.objects.get(id=obj.id)
-        return ingredients_bd_measurement_unit.measurement_unit
+        measurement_unit = obj.ingredients.measurement_unit
+        return measurement_unit
 
 
 class RecipeReadSerializer(ModelSerializer):
