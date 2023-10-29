@@ -107,16 +107,16 @@ scp .env <username>@<host>:/home/<username>/.env
 ```
 Выполните команды для запуска проекта на удаленном сервере средствами Docker:
 ```
-# Выполняет pull образов с Docker Hub
+Выполняет pull образов с Docker Hub
 sudo docker compose -f docker-compose.production.yml pull
-# Перезапускает все контейнеры в Docker Compose
+Перезапускает все контейнеры в Docker Compose
 sudo docker compose -f docker-compose.production.yml down
 sudo docker compose -f docker-compose.production.yml up -d
-# Выполняет миграции, сбор статики и запустите скрипт заполнения базы данных ингредиентов
+Выполняет миграции, сбор статики и запустите скрипт заполнения базы данных ингредиентов
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py runscript load_in_bd
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
-# Создайте профиль администратора
+Создайте профиль администратора
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
 
 ### Как ознакомиться с документацией:
@@ -126,7 +126,7 @@ sudo docker compose -f docker-compose.production.yml exec backend python manage.
 
 Теперь ознакомиться с документацией и эндпоинтами можно по адресу http://localhost/api/docs/
 
-Пример запроса:
+### Пример запроса:
 
 POST http://localhost/api/recipes/
 
