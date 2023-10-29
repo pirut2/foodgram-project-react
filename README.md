@@ -1,10 +1,3 @@
-# praktikum_new_diplom
-Для доступа к админке 
-password: qwerty123
-email: qwerty@yandex.ru
-
-# Со второй частью диплома README дополнится и сильно изменится.
-
 # foodgram | REST API Service 
 
 ### Описание:
@@ -23,9 +16,11 @@ email: qwerty@yandex.ru
 - Djoser
 - python-dotenv
 - JavaScript
-- ...
+- Docker
+- Nginx
+- Gunicorn
 
-### Как запустить проект:
+### Как запустить только backend проекта на локальной машине:
 
 Клонируйте репозиторий:
 ```
@@ -82,8 +77,49 @@ python manage.py runserver
 ```
 Полная документация прокта (redoc) доступна по адресу http://127.0.0.1:8000/redoc/
 
-### Документация, эндпоинты и примеры запросов.
+### Как запустить проект на удаленном сервере:
+Клонируйте репозиторий на локальный компьютер:
+```
+git clone git@github.com:pirut2/foodgram-project-react.git
+```
+Авторизуйтесь на удаленном сервере.
+```
+Установите Docker на сервере:
+```
+sudo apt update
+sudo apt install curl
+curl -fSL https://get.docker.com -o get-docker.sh
+sudo sh ./get-docker.sh
+sudo apt-get install docker-compose-plugin
+```
+Проверьте правильно ли установлен Docker:
+```
+sudo systemctl status docker
+``
+Отредактируйте конфигурацию Nginx на своем компьютере :
+```
+Скопируйте файлы  nginx.conf, docker-compose.production и .env(заполненный по примеру .env.example) на удаленный сервер:
+```
+scp [путь к файлу] [имя пользователя]@[имя сервера/ip-адрес]:[путь к файлу]
+scp docker-compose.productionyml <username>@<host>:/home/<username>/docker-compose.productionyaml
+scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
+scp .env <username>@<host>:/home/<username>/.env
+```
+Выполните команды для запуска проекта на удаленном сервере средствами Docker:
+```
+# Выполняет pull образов с Docker Hub
+sudo docker compose -f docker-compose.production.yml pull
+# Перезапускает все контейнеры в Docker Compose
+sudo docker compose -f docker-compose.production.yml down
+sudo docker compose -f docker-compose.production.yml up -d
+# Выполняет миграции, сбор статики и запустите скрипт заполнения базы данных ингредиентов
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py runscript load_in_bd
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
+# Создайте профиль администратора
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
 
+### Как ознакомиться с документацией:
 1. После клонирования репозитория с github запустите и авторизуйтесь в приложении docker.
 2. В репозитории проекта перейдите в папку infra.
 3. Выполните команду docker-compose up.
@@ -148,5 +184,10 @@ POST http://localhost/api/recipes/
   "cooking_time": 1
 }
 
+
+### Проект развернут по адресу http://lisiyarecipe.hopto.org
+### Данные учетной записи администратора:
+email: qwert@yandex.ru
+password: Qwerty11
 ### Автор:
 - Дмитрий Пирут - разработчик
