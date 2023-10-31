@@ -153,7 +153,7 @@ class RecipeWriteSerializer(ModelSerializer):
                 raise ValidationError({
                     'ingredients': 'Повтор ингридиента.'
                 })
-            if int(item['amount']) <= 0:
+            # if int(item['amount']) <= 0:
                 raise ValidationError({
                     'amount': 'Количество не может быть равно 0.'
                 })
