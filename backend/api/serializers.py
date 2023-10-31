@@ -153,10 +153,11 @@ class RecipeWriteSerializer(ModelSerializer):
                 raise ValidationError({
                     'ingredients': 'Повтор ингридиента.'
                 })
-            # if int(item['amount']) <= 0:
-                raise ValidationError({
-                    'amount': 'Количество не может быть равно 0.'
-                })
+            if int(item['amount']) <= 0:
+                raise ValidationError(
+                    detail='Количество ингредиента не может быть 0 или меньше',
+                    code=status.HTTP_400_BAD_REQUEST
+                )
             ingredients.append(ing)
         return value
 
