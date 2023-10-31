@@ -46,7 +46,11 @@ class IngredientsRecipe(models.Model):
         on_delete=models.CASCADE,
         related_name='ingredients_recipe')
     amount = models.PositiveIntegerField(
-        default=1, verbose_name='количество ингридиента')
+        default=1, verbose_name='количество ингридиента',
+        validators=[
+            MaxValueValidator(10000),
+            MinValueValidator(1)
+        ])
 
     def __str__(self) -> str:
         return f'{self.ingredients}, {self.amount}'
