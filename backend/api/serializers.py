@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.validators import MinValueValidator
 from rest_framework import status
 from rest_framework.serializers import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
@@ -74,7 +75,7 @@ class IngredientsRecipeSerializer(ModelSerializer):
     id = IntegerField(required=True)
     name = SerializerMethodField(read_only=True)
     measurement_unit = SerializerMethodField(read_only=True)
-    amount = IntegerField(required=True)
+    amount = IntegerField(required=True, validators=[MinValueValidator(1)])
 
     class Meta:
         model = IngredientsRecipe
